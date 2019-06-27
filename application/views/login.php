@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0"> 
+<title>中山联通人力资源信息查询系统</title>
+
+<link rel="stylesheet" href="<?php echo base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css') ?>">
+  
+<link rel="stylesheet" href="<?php echo base_url('assets/dist/css/login.css') ?>">
+<link href="<?php echo base_url('assets/images/logo-icob.ico');?>" type="image/x-icon" rel="shortcut icon">
+
+</head>
+
+<body>
+<div class="login_box">
+    <div class="login_l_img"><img src="<?php echo base_url('assets/dist/img/login-img.png') ?>" /></div>
+        <div class="login">
+            <div class="login_logo"><a href="<?php echo base_url('auth/login'); ?>"><img src="<?php echo base_url('assets/dist/img/login_logo.png') ?>" /></a></div>
+            <div class="login_name">
+                <p>中山联通人力资源信息查询系统</p>
+            </div>      
+            <font color="red">
+            <?php echo validation_errors(); ?>  
+            <?php if(!empty($errors)) {
+            echo $errors;
+            } ?>
+            </font>
+            <br />
+            <form action="<?php echo base_url('auth/login') ?>" method="post">
+                <div class="form-group has-feedback">
+                    <input class="form-control" type="text" name="user_id" id="user_id" placeholder="用户名" required="required" maxlength="18" autocomplete="off">
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" name="password" id="password" required="required" placeholder="密码" autocomplete="off">
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                    <input class="form-control" type="text" name="verify_code" id="code" required="required" placeholder="验证码" autocomplete="off">
+                    </div>
+                    <div class="col-md-4">
+                        <a href="javascript:void(0);" id="reload-captcha"><p id="captcha-image"></p></a>
+                    </div>
+                </div>
+                <input name="error_counter" value="<?php echo ++$error_counter;?>" type='hidden'/>
+                <input id="signin" value="登录" style="width:100%;" type="submit">
+            </form>
+        </div>
+    </div>
+    
+    <div class="copyright">请使用火狐浏览器(Firefox)或谷歌浏览器(Chrome)登录人力资源信息查询系统</div>
+</div>
+<script src="<?php echo base_url('assets/bower_components/jquery/dist/jquery.min.js') ?>"></script>
+<script type="text/javascript">
+    function get_captcha() {
+        $.get("<?php echo base_url('auth/get_captcha');?>", function(data){
+            $('#captcha-image').html(data);
+        });
+    };
+    $(document).ready(function() {
+        get_captcha();
+        $('#reload-captcha').click(get_captcha);
+    });
+</script>
+</body>
+</html>
