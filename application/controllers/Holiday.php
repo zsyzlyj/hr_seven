@@ -428,12 +428,10 @@ class Holiday extends Admin_Controller {
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$filename);
         header('Cache-Control: max-age=0');
-        
-        #header('Content-Type:text/html;charset=utf-8');
-        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         /**/
-        
+        exit;
     }
     
     

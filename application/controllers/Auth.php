@@ -7,6 +7,8 @@ class Auth extends Admin_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('model_auth');
+		
+        #$this->load->model('model_wage_oracle');
 		$this->data['user_name'] = $this->session->userdata('user_name');
         $this->data['user_id'] = $this->session->userdata('user_id');
 	}

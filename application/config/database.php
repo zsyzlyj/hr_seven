@@ -97,3 +97,32 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+$tnsname='(DESCRIPTION =
+(ADDRESS_LIST =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = 10.210.192.20)(PORT = 1521))
+)
+(CONNECT_DATA =
+  (SERVICE_NAME = oradls)
+)
+)';
+$db['oracle'] = array(
+	'dsn'	=> '',
+	'hostname' => $tnsname,
+	'username' => 'zs_salary',
+	'password' => 'salaryzs_Dd',
+	'database' => '',
+	'dbdriver' => 'oci8',
+	'dbprefix' => '',
+	'pconnect' => TRUE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);

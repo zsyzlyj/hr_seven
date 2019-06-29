@@ -359,13 +359,15 @@ class Super_holiday extends Admin_Controller{
         }
 
         $objPHPExcel->setActiveSheetIndex(0);
-        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $filename = date('YmdHis').".xlsx";
         // Sending headers to force the user to download the file
+        ob_end_clean();
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'.$filename);
-        header("Content-Disposition:filename=".$filename);
         header('Cache-Control: max-age=0');
+        
+        #header('Content-Type:text/html;charset=utf-8');
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
     }
     public function excel_plan(){
