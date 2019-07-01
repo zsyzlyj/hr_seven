@@ -18,63 +18,52 @@ class Test extends MY_Controller{
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
         $objPHPExcel->setActiveSheetIndex(0);
-        $result = $this->model_wage_oracle->salary_person_test();
-        // Field names in the first row
-        $fields = $result->list_fields();
-        $col = 0;
-        foreach ($fields as $field){
-			/*
-            $v="";
-            switch($field){
-                case 'name':$v="姓名\t";break;
-                case 'department':$v="部门\t";break;
-                case 'initdate':$v="开始工作时间\t";break;
-                case 'indate':$v="入职时间\t";break;
-                case 'Companyage':$v="社会工龄\t";break;
-                case 'Totalage':$v="公司工龄\t";break;
-                case 'Totalday':$v="可休假总数\t";break;
-                case 'Lastyear':$v="去年休假数\t";break;
-                case 'Thisyear':$v="今年休假数\t";break;
-                case 'Bonus':$v="荣誉休假数\t";break;
-                case 'Used':$v="已休假数\t";break;
-                case 'Rest':$v="未休假数\t";break;
-                case 'Jan':$v="一月\t";break;
-                case 'Feb':$v="二月\t";break;
-                case 'Mar':$v="三月\t";break;
-                case 'Apr':$v="四月\t";break;
-                case 'May':$v="五月\t";break;
-                case 'Jun':$v="六月\t";break;
-                case 'Jul':$v="七月\t";break;
-                case 'Aug':$v="八月\t";break;
-                case 'Sep':$v="九月\t";break;
-                case 'Oct':$v="十月\t";break;
-                case 'Nov':$v="十一月\t";break;
-                case 'Dece':$v="十二月\t";break;
-                case 'user_id':$v="身份证号\t";break; 	
-                default:break;
-            }
-            if($v != ""){
-                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $v);
-                $col++;
-			}
-			*/
-			$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $field);
-            $col++;
-		}
-		$row = 2;
-        foreach($result->result() as $data){
+        $id=null;
+        $attr=array();
+        $data=array();
+        $active_counter=0;
+        //获取个人信息
+        $id='230302198910155828';
+        $user_data=$this->model_wage_oracle->getById($id);
+        //获取线条信息
+        $lx1_set=$this->model_wage_oracle->getlx1($user_data['LX'],$user_data['DUTY']);
+        //
+        foreach($lx1_set as $k =>$v){
+            $objPHPExcel->setActiveSheetIndex($active_counter);
+            $objPHPExcel->getActiveSheet($active_counter)->setTitle($v["LX1"]);
             $col = 0;
-            foreach ($fields as $field){
-				$objPHPExcel->getActiveSheet(0)->setCellValueByColumnAndRow($col, $row, $data->$field);
-                $col++;
+            $fields=array();
+            $result=array();
+            $fields=$this->model_wage_oracle->getAttr($user_data['LX'],$user_data['DUTY'],$v);
+            foreach ($fields as $a => $b){
+                foreach($b as $c => $d){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $d);
+                    $col++;
+                }
             }
-            $row++;
+            $row = 2;
+            $result=$this->model_wage_oracle->getDetail($user_data['PERSON_NAME'],$user_data['LX'],$user_data['DUTY'],$v);
+            foreach($result as $a => $b){
+                $col = 0;
+                foreach ($b as $c => $d){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d);
+                    $col++;
+                }
+                $row++;
+            }
+            unset($fields);
+            unset($result);
+            $active_counter++;
+            $objPHPExcel->createSheet();
         }
-
-        $objPHPExcel->setActiveSheetIndex(0);
-		$filename = date('YmdHis');
+        
+        
+        
+		
+		$filename = $user_data['PERSON_NAME'].date('m').'月';
         ob_end_clean();
-        header('Content-Type: application/vnd.ms-excel');
+        #header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename);
         header('Cache-Control: max-age=0');
 
@@ -82,18 +71,21 @@ class Test extends MY_Controller{
         $objWriter->save('php://output');
     }
 	public function index(){
-		//$user_data=$this->model_wage_oracle->salary_person_test();
-		$this->excel();
+        
+        $this->excel();
+        #$this->model_wage_oracle->test();
+		#$this->excel();
+		//echo var_dump($this->model_wage_oracle->test());
+		
 		/*
-		echo var_dump($user_data);
-		echo '<br />';
 		echo var_dump($this->model_wage_oracle->salary_person_test());
 		echo '<br />';
 		echo var_dump($this->model_wage_oracle->lqp_test());
 		echo '<br />';
 		echo var_dump($this->model_wage_oracle->lqp_temp_test());
 		echo '<br />';
-*/
+		*/
+/**/
 		/*
 		foreach($user_data as $k => $v){
 			foreach($v as $a => $b)

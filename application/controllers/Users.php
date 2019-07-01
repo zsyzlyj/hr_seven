@@ -155,14 +155,16 @@ class Users extends Admin_Controller{
             $row++;
         }
         $objPHPExcel->setActiveSheetIndex(0);
-        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $filename = date('YmdHis').".xlsx";
         // Sending headers to force the user to download the file
        
-        header('Content-Type: application/vnd.ms-excel');
+        #header('Content-Type: application/vnd.ms-excel');
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename);
-        header("Content-Disposition:filename=".$filename);
         header('Cache-Control: max-age=0');
+        
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
          /**/
     }

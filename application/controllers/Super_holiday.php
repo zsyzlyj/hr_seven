@@ -362,7 +362,8 @@ class Super_holiday extends Admin_Controller{
         $filename = date('YmdHis').".xlsx";
         // Sending headers to force the user to download the file
         ob_end_clean();
-        header('Content-Type: application/vnd.ms-excel');
+        #header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename);
         header('Cache-Control: max-age=0');
         
@@ -425,7 +426,9 @@ class Super_holiday extends Admin_Controller{
         $filename = date('YmdHis').".xlsx";
         // Sending headers to force the user to download the file
         ob_end_clean();
-        header('Content-Type: application/vnd.ms-excel');
+        #header('Content-Type: application/vnd.ms-excel');
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename);
         header('Cache-Control: max-age=0');
         $objPHPExcel->setActiveSheetIndex(0);

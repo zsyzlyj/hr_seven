@@ -50,6 +50,12 @@
           <!--<li id="applyWageProof"><a href="<?php echo base_url('wage/apply_wage_proof') ?>"><i class="fa fa-list"></i><span> 收入证明申请</span></a></li>-->
           <?php endif;?>
           <!---->
+          <li id="chargeMainMenu">
+            <a href="<?php echo base_url('wage/charge') ?>">
+              <i class="fa fa-file-archive-o"></i>
+              <span>本月提成明细</span>
+            </a>
+          </li>
         <?php endif ?>
         <?php if(strstr($_SERVER['PHP_SELF'],'holiday')):?>
 

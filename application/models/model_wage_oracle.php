@@ -6,17 +6,39 @@ class Model_wage_oracle extends CI_Model{
 		parent::__construct();
 		$this->db_oracle=$this->load->database('oracle',TRUE);
 	}
-
 	public function test(){
 		#$sql = "SELECT count(*) FROM T_SALARY_PERSON";
-		$sql = "SELECT table_name FROM user_tables";
+		#$sql = "select distinct lx1 from t_salary_detail where acct_month='201905' and lx='商企' and duty='客户经理' and falg='1'";
+		$sql = "select * from t_salary_detail where  acct_month='201905' and lx='商企' and duty='客户经理' and falg='0' and lx1='后付费提成'";
+		
 		$query = $this->db_oracle->query($sql);
 		return $query->result_array();
 	}
-	public function salary_person_test(){
-		$sql = "SELECT * FROM T_SALARY_PERSON";
+	public function getById($id){
+		$sql = "SELECT person_name,lx,duty FROM T_SALARY_person WHERE pspt_id=?";
+		$query = $this->db_oracle->query($sql,$id);
+		return $query->row_array();
+	}
+	public function getLx1($lx,$duty){
+		$sql = "select distinct lx1 from t_salary_detail where acct_month='201905' and lx=? and duty=? and falg='0'";
+		$query = $this->db_oracle->query($sql,array($lx,$duty));
+		return $query->result_array();
+	}
+	public function getAttr($lx,$duty,$lx1){
+		$sql = "select * from t_salary_detail where acct_month='201905' and lx=? and duty=?	and falg='0' and lx1=?";
+		$query = $this->db_oracle->query($sql,array($lx,$duty,$lx1));
+		return $query->result_array();
+	}
+	public function getDetail($name,$lx,$duty,$lx1){
+		$sql = "select * from t_salary_detail where acct_month='201905' and STAFF_NAME=? and lx=? and duty=? and falg='1' and lx1=?";
+		$query = $this->db_oracle->query($sql,array($name,$lx,$duty,$lx1));
+		return $query->result_array();
+	}
+	public function getAllTable(){
+		#$sql = "SELECT count(*) FROM T_SALARY_PERSON";
+		$sql = "SELECT table_name FROM all_tables";
 		$query = $this->db_oracle->query($sql);
-		return $query;
+		return $query->result_array();
 	}
 	public function lqp_test(){
 		$sql = "SELECT count(*) FROM LQP_TEST";
