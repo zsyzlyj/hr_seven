@@ -77,6 +77,13 @@ class Auth extends Admin_Controller {
 							redirect('dashboard', 'refresh');
 						}
 						else{
+							$this->data['error_counter']++;
+							$this->data['errors'] = '密码错误';
+							$this->load->view('login', $this->data);
+						}
+						/*
+						else{
+							
 							if($this->data['error_counter'] == 3){
 								$this->data['errors'] = ' 密码错误3次，请联系管理员后重试';
 								$this->load->view('login', $this->data);
@@ -86,8 +93,10 @@ class Auth extends Admin_Controller {
 								$this->data['error_counter']++;
 								$this->data['errors'] = '密码错误';
 								$this->load->view('login', $this->data);
+								
 							}
 						}
+						*/
 					}
 					else{
 						$this->data['errors'] = '用户不存在，请联系管理员';

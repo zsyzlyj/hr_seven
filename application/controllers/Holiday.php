@@ -59,9 +59,9 @@ class Holiday extends Admin_Controller {
             $this->data['current_dept'] = $_POST['selected_dept'];
         }
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        $admin_result=explode('/',$admin_data['dept']);
-        $this->data['dept_options']=$admin_result;
+        #$admin_result=array();
+        #$admin_result=explode('/',$admin_data['dept']);
+        $this->data['dept_options']=$admin_data['dept'];
 		$this->render_template('holiday/mydeptholiday', $this->data);
     }
     public function mydeptplan(){
@@ -72,6 +72,7 @@ class Holiday extends Admin_Controller {
         $this->data['submit_status'] ="";
         $selected_dept="";
         $domain=array();
+        
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             if(array_key_exists('selected_dept', $_POST)){
                 $selected_dept=$_POST['selected_dept'];
@@ -125,10 +126,10 @@ class Holiday extends Admin_Controller {
             $this->data['submit_status'] = $this->model_feedback->getFeedbackByDept($selected_dept)['submit_status'];
         }
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        $admin_result=explode('/',$admin_data['dept']);
+        #$admin_result=array();
+        #$admin_result=explode('/',$admin_data['dept']);
 
-        $this->data['dept_options']=$admin_result;
+        $this->data['dept_options']=$admin_data['dept'];
         $this->data['submitted'] = $submitted;
         #$this->data['submitted']=4;        
         $this->data['plan_data'] = $result;
@@ -185,19 +186,19 @@ class Holiday extends Admin_Controller {
         /*============================================================*/
         $user_id=$this->session->userdata('user_id');        
         $this->data['plan_data'] = $this->model_plan_seven->getPlanById($user_id);
-        $this->form_validation->set_rules('jun', 'jun','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('jul', 'jul','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('aug', 'aug','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('sep', 'sep','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('oct', 'oct','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('nov', 'nov','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('dec', 'dec','is_natural|greater_than[-1]');
+        $this->form_validation->set_rules('jun', 'jun','greater_than[-100]');
+        $this->form_validation->set_rules('jul', 'jul','greater_than[-100]');
+        $this->form_validation->set_rules('aug', 'aug','greater_than[-100]');
+        $this->form_validation->set_rules('sep', 'sep','greater_than[-100]');
+        $this->form_validation->set_rules('oct', 'oct','greater_than[-100]');
+        $this->form_validation->set_rules('nov', 'nov','greater_than[-100]');
+        $this->form_validation->set_rules('dec', 'dec','greater_than[-100]');
         
         /*
-        $this->form_validation->set_rules('firstquater', 'firstquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('secondquater', 'secondquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('thirdquater', 'thirdquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('fourthquater', 'fourthquater','is_natural|greater_than[-1]');
+        $this->form_validation->set_rules('firstquater', 'firstquater','greater_than[-1]');
+        $this->form_validation->set_rules('secondquater', 'secondquater','greater_than[-1]');
+        $this->form_validation->set_rules('thirdquater', 'thirdquater','greater_than[-1]');
+        $this->form_validation->set_rules('fourthquater', 'fourthquater','greater_than[-1]');
         */
         if($this->form_validation->run() == TRUE){
             /*
@@ -248,10 +249,10 @@ class Holiday extends Admin_Controller {
 
         /*============================================================*/
         /*
-        $this->form_validation->set_rules('firstquater', 'firstquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('secondquater', 'secondquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('thirdquater', 'thirdquater','is_natural|greater_than[-1]');
-        $this->form_validation->set_rules('fourthquater', 'fourthquater','is_natural|greater_than[-1]');
+        $this->form_validation->set_rules('firstquater', 'firstquater','greater_than[-1]');
+        $this->form_validation->set_rules('secondquater', 'secondquater','greater_than[-1]');
+        $this->form_validation->set_rules('thirdquater', 'thirdquater','greater_than[-1]');
+        $this->form_validation->set_rules('fourthquater', 'fourthquater','greater_than[-1]');
 
         if($this->form_validation->run() == TRUE){
             if($_POST['firstquater']+$_POST['secondquater']+$_POST['thirdquater']+$_POST['fourthquater']==$_POST['total']){
@@ -303,9 +304,9 @@ class Holiday extends Admin_Controller {
             $this->data['current_dept']=$selected_dept;
         }
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        array_push($admin_result,$admin_data['dept']);
-        $this->data['dept_options']=$admin_result;
+        #$admin_result=array();
+        #array_push($admin_result,$admin_data['dept']);
+        $this->data['dept_options']=$admin_data['dept'];
         $this->data['holiday_data'] = $holiday_data;
         unset($admin_result);
         $this->render_template('holiday/mydomainholiday', $this->data);
@@ -340,9 +341,9 @@ class Holiday extends Admin_Controller {
             $this->data['submit_status'] = $this->model_feedback->getFeedbackByDept($selected_dept)['submit_status'];
         }
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        array_push($admin_result,$admin_data['dept']);
-        $this->data['dept_options']=$admin_result;
+        #$admin_result=array();
+        #array_push($admin_result,$admin_data['dept']);
+        $this->data['dept_options']=$admin_data['dept'];
         $this->data['submitted'] = $submitted;
         $this->data['plan_data'] = $result;
         $this->data['feedback'] = $this->model_feedback->getFeedbackByDept($selected_dept);
@@ -429,10 +430,10 @@ class Holiday extends Admin_Controller {
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filename);
         header('Cache-Control: max-age=0');
-        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
         /**/
-        exit;
     }
     
     
@@ -543,8 +544,8 @@ class Holiday extends Admin_Controller {
         $selected_dept=$_POST['cs_dept'];
         $domain=array();
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        $admin_result=explode('/',$admin_data['dept']);
+        #$admin_result=array();
+        #$admin_result=explode('/',$admin_data['dept']);
         if($selected_dept=='营业中心'){
             $manager_data = $this->model_manager->getManagerByDept($selected_dept);            
             foreach($manager_data as $k => $v){
@@ -588,7 +589,7 @@ class Holiday extends Admin_Controller {
         }
         $this->data['current_dept']=$selected_dept;
         $this->data['submit_status'] = $this->model_feedback->getFeedbackByDept($selected_dept)['submit_status'];
-        $this->data['dept_options']=$admin_result;
+        $this->data['dept_options']=$admin_data['dept'];
         $this->data['submitted'] = $submitted;
         #$this->data['submitted']=4;        
         $this->data['plan_data'] = $result;
@@ -657,9 +658,9 @@ class Holiday extends Admin_Controller {
             $this->data['feedback_status'] =$feedback['feedback_status'];
         }
         $admin_data = $this->model_manager->getManagerById($user_id);
-        $admin_result=array();
-        $admin_result=explode('/',$admin_data['dept']);
-        $this->data['dept_options']=$admin_result;
+        #$admin_result=array();
+        #$admin_result=explode('/',$admin_data['dept']);
+        $this->data['dept_options']=$admin_data['dept'];
         $this->data['plan_data'] = $result;
         $this->render_template('holiday/audit', $this->data);
     }

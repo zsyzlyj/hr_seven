@@ -8,6 +8,8 @@ class Wage extends Admin_Controller{
 		$this->not_logged_in();
 		$this->data['page_title'] = 'Wage';
         $this->load->model('model_wage');
+        $this->load->model('model_wage_gw');
+        $this->load->model('model_wage_gw_attr');
         $this->load->model('model_holiday');
         $this->load->model('model_users');
         $this->load->model('model_wage_doc');
@@ -845,6 +847,11 @@ class Wage extends Admin_Controller{
         $this->render_template('wage/wage_notice',$this->data);
     }
     public function excel_charge(){
+        $this->data['chosen_month']=$_POST['chosen_month'];
+        $chosen_month=substr($_POST['chosen_month'],0,4).substr($_POST['chosen_month'],5,6).'01';
+        $month=date('Ym',strtotime('-1 month',strtotime($chosen_month)));
+        
+        
         $this->load->library('PHPExcel');
         $this->load->library('PHPExcel/IOFactory');
         $objPHPExcel = new PHPExcel();
@@ -857,8 +864,9 @@ class Wage extends Admin_Controller{
         //获取个人信息
         $id=$this->data['user_id'];
         $user_data=$this->model_wage_oracle->getById($id);
+        
         //获取线条信息
-        $lx1_set=$this->model_wage_oracle->getlx1($user_data['LX'],$user_data['DUTY']);
+        $lx1_set=$this->model_wage_oracle->getlx1($user_data['LX'],$user_data['DUTY'],$month);
         //
         foreach($lx1_set as $k =>$v){
             $objPHPExcel->setActiveSheetIndex($active_counter);
@@ -866,7 +874,7 @@ class Wage extends Admin_Controller{
             $col = 0;
             $fields=array();
             $result=array();
-            $fields=$this->model_wage_oracle->getAttr($user_data['LX'],$user_data['DUTY'],$v);
+            $fields=$this->model_wage_oracle->getAttr($user_data['LX'],$user_data['DUTY'],$v,$month);
             foreach ($fields as $a => $b){
                 foreach($b as $c => $d){
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $d);
@@ -874,11 +882,11 @@ class Wage extends Admin_Controller{
                 }
             }
             $row = 2;
-            $result=$this->model_wage_oracle->getDetail($user_data['PERSON_NAME'],$user_data['LX'],$user_data['DUTY'],$v);
+            $result=$this->model_wage_oracle->getDetail($user_data['PERSON_NAME'],$user_data['LX'],$user_data['DUTY'],$v,$month);
             foreach($result as $a => $b){
                 $col = 0;
                 foreach ($b as $c => $d){
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d);
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d.' ');
                     $col++;
                 }
                 $row++;
@@ -889,10 +897,8 @@ class Wage extends Admin_Controller{
             $objPHPExcel->createSheet();
         }
         
-        
-        
-		
-		$filename = $user_data['PERSON_NAME'].date('m').'月.xlsx';
+        #echo $month;
+		$filename = $user_data['PERSON_NAME'].$month.'.xlsx';
         ob_end_clean();
         #header('Content-Type: application/vnd.ms-excel');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -903,6 +909,45 @@ class Wage extends Admin_Controller{
         $objWriter->save('php://output');
     }
     public function charge(){
+        $this->data['wage_data']="";
+        $this->data['attr_data']="";
+        $this->data['chosen_month']="";
         $this->render_template('wage/wage_charge',$this->data);
     }
+
+    
+    public function gw_charge(){
+        $this->data['wage_data']="";
+        $this->data['attr_data']="";
+        $this->data['chosen_month']="";
+        $this->data['trueend']=0;
+        $name=$this->session->userdata('user_name');
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $this->data['chosen_month']=$_POST['chosen_month'];
+            $doc_name=substr($_POST['chosen_month'],0,4).substr($_POST['chosen_month'],5,6);
+            if(strlen($doc_name)<=7 and $doc_name!=""){
+                $this->data['attr_data']=$this->model_wage_gw_attr->getData($doc_name);
+                if(!empty($this->data['attr_data'])){
+                    $this->data['wage_data']=$this->model_wage_gw->getDataByNameAndDate($name,$doc_name);
+                }
+            }
+            /*
+            $log=array(
+                'user_id' => $this->data['user_id'],
+                'username' => $this->data['user_name'],
+                'login_ip' => $_SERVER["REMOTE_ADDR"],
+                'staff_action' => '查看'.$this->data['chosen_month'].'固网提成',
+                'action_time' => date('Y-m-d H:i:s')
+            );
+            $this->model_log_action->create($log);
+            unset($log);
+            */
+            $this->render_template('wage/wage_gw_charge',$this->data);
+            
+        }
+        else{ 
+            $this->render_template('wage/wage_gw_charge',$this->data);
+        }
+    }
+    
 }

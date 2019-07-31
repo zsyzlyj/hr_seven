@@ -19,19 +19,19 @@ class Model_wage_oracle extends CI_Model{
 		$query = $this->db_oracle->query($sql,$id);
 		return $query->row_array();
 	}
-	public function getLx1($lx,$duty){
-		$sql = "select distinct lx1 from t_salary_detail where acct_month='201905' and lx=? and duty=? and falg='0'";
-		$query = $this->db_oracle->query($sql,array($lx,$duty));
+	public function getLx1($lx,$duty,$month){
+		$sql = "select distinct lx1 from t_salary_detail where acct_month=? and lx=? and duty=? and falg='0'";
+		$query = $this->db_oracle->query($sql,array($month,$lx,$duty));
 		return $query->result_array();
 	}
-	public function getAttr($lx,$duty,$lx1){
-		$sql = "select * from t_salary_detail where acct_month='201905' and lx=? and duty=?	and falg='0' and lx1=?";
-		$query = $this->db_oracle->query($sql,array($lx,$duty,$lx1));
+	public function getAttr($lx,$duty,$lx1,$month){
+		$sql = "select * from t_salary_detail where acct_month=? and lx=? and duty=?	and falg='0' and lx1=?";
+		$query = $this->db_oracle->query($sql,array($month,$lx,$duty,$lx1));
 		return $query->result_array();
 	}
-	public function getDetail($name,$lx,$duty,$lx1){
-		$sql = "select * from t_salary_detail where acct_month='201905' and STAFF_NAME=? and lx=? and duty=? and falg='1' and lx1=?";
-		$query = $this->db_oracle->query($sql,array($name,$lx,$duty,$lx1));
+	public function getDetail($name,$lx,$duty,$lx1,$month){
+		$sql = "select * from t_salary_detail where acct_month=? and STAFF_NAME=? and lx=? and duty=? and falg='1' and lx1=?";
+		$query = $this->db_oracle->query($sql,array($month,$name,$lx,$duty,$lx1));
 		return $query->result_array();
 	}
 	public function getAllTable(){

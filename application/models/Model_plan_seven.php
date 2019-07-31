@@ -21,7 +21,7 @@ class Model_plan_seven extends CI_Model{
 	}
 	public function getPlanByDept($dept = null){		
 		if($dept){	
-			$sql = "SELECT * FROM plan_seven WHERE locate(?,department)";
+			$sql = "SELECT * FROM plan_seven WHERE department=?";
 			$query = $this->db->query($sql, array($dept));
 			return $query->result_array();
 		}
@@ -32,7 +32,7 @@ class Model_plan_seven extends CI_Model{
 	}
 	public function exportmydeptPlanData($dept=null){
 		if($dept){
-			$sql = "SELECT * FROM plan_seven WHERE locate(?,department)";
+			$sql = "SELECT * FROM plan_seven WHERE department=?";
 			$query = $this->db->query($sql, array($dept));
 			return $query;
 		}

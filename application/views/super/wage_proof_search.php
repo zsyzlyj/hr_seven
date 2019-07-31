@@ -39,36 +39,35 @@
                     <table id="wageTable"class="table table-bordered table-responsive" style="white-space:nowrap;text-align:center;border-color:silver;">
                       <thead>
                         <tr style="border-color:silver;">
-                          <th style="border-color:silver;">姓名</th>
                           <th style="border-color:silver;">身份证</th>
+                          <th style="border-color:silver;">姓名</th>
                           <th style="border-color:silver;">证明类型选择</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <?php foreach($user_info as $k => $v): ?>
                         <tr style="border-color:silver;">
-                          <?php foreach($v as $a => $b):?>
-                            <td style="border-color:silver;"><?php echo $b;?></td>
-                          <?php endforeach; ?>
-                          <td style="border-color:silver;">
-                            <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
-                            <input name="user_id" type="hidden" value="<?php echo $v['user_id'];?>">
-                            <input name="type" type="hidden" value="收入证明">
-                            <button class="btn">收入证明</button>
-                            </form>
-                            <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
-                            <input name="user_id" type="hidden" value="<?php echo $v['user_id'];?>">
-                            <input name="type" type="hidden" value="收入证明（农商银行）">
-                            <button class="btn">收入证明（农商银行）</button>
-                            </form>
-                            <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
-                            <input name="user_id" type="hidden" value="<?php echo $v['user_id'];?>">
-                            <input name="type" type="hidden" value="收入证明（公积金）">
-                            <button class="btn">收入证明（公积金）</button>
-                            </form>
-                          </td>
-                        </tr>
+                        <?php foreach($user_info as $k => $v): ?>
+                          <td style="border-color:silver;"><?php echo $v;?></td>
+                          
                         <?php endforeach; ?>
+                        <td style="border-color:silver;">
+                          <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
+                          <input name="user_id" type="hidden" value="<?php echo $user_info['user_id'];?>">
+                          <input name="type" type="hidden" value="收入证明">
+                          <button class="btn">收入证明</button>
+                          </form>
+                          <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
+                          <input name="user_id" type="hidden" value="<?php echo $user_info['user_id'];?>">
+                          <input name="type" type="hidden" value="收入证明（农商银行）">
+                          <button class="btn">收入证明（农商银行）</button>
+                          </form>
+                          <form action="<?php echo base_url('super_wage/proof_creator');?>" method="POST" target="_blank" style="display:inline">
+                          <input name="user_id" type="hidden" value="<?php echo $user_info['user_id'];?>">
+                          <input name="type" type="hidden" value="收入证明（公积金）">
+                          <button class="btn">收入证明（公积金）</button>
+                          </form>
+                        </td>
+                        </tr>
                       </tbody>
                     </table>
                     <?php elseif($keyword!=""):?>

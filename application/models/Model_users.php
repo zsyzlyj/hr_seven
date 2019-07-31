@@ -10,7 +10,15 @@ class Model_users extends CI_Model{
 		$query = $this->db->query($sql, array(1));
 		return $query->result_array();
 	}
-	public function getUserById($userId = null){
+	public function getUserById($userId){
+		if($userId){
+			$sql = "SELECT * FROM users WHERE user_id = ?";	
+			$query = $this->db->query($sql, array($userId));
+			$query->num_rows();
+			return $query->row_array();
+		}
+	}
+	public function getNameById($userId = null){
 		if($userId){
 			$sql = "SELECT * FROM users WHERE user_id = ?";	
 			$query = $this->db->query($sql, array($userId));
@@ -21,9 +29,10 @@ class Model_users extends CI_Model{
 	public function getIdByName($name){
 		$sql = 'SELECT user_id,username FROM users WHERE username = ?';
 		$query = $this->db->query($sql, array($name));
-		return $query->result_array();
+		return $query->row_array();
 	}
-	public function checkUserById($userId = null){
+	
+	public function checkUserById($userId){
 		if($userId){
 			$sql = "SELECT * FROM users WHERE user_id = ?";	
 			$query = $this->db->query($sql, array($userId));
@@ -32,13 +41,13 @@ class Model_users extends CI_Model{
 		return false;
 	}
 
-	public function create($data = ''){
+	public function create($data){
 		if($data){
 			$create = $this->db->insert('users', $data);
 			return ($create == true) ? true : false;
 		}
 	}
-	public function createbatch($data = ''){
+	public function createbatch($data){
 		if($data){
 			$create = $this->db->insert_batch('users', $data);
 			return ($create == true) ? true : false;
@@ -55,7 +64,7 @@ class Model_users extends CI_Model{
 			return ($create == true) ? true : false;
 		}
 	}
-	public function edit($data = array(), $id = null){
+	public function edit($data = array(), $id){
 		$this->db->where('user_id', $id);
 		$update = $this->db->update('users', $data);
 		return ($update == true) ? true : false;	
