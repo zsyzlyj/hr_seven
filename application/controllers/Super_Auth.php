@@ -71,6 +71,9 @@ class Super_Auth extends Admin_Controller{
 									break;
 								case 'g':
 									redirect('super_gw_wage/search', 'refresh');
+									break	;
+								case '政企':
+									redirect('super_wage/search_cd', 'refresh');
 									break;
 								default:
 									break;

@@ -27,6 +27,8 @@ class Wage extends Admin_Controller{
         
         $this->load->model('model_wage_tax');
         $this->load->model('model_wage_tax_attr');
+        $this->load->model('model_wage_zq');
+        $this->load->model('model_wage_zq_attr');
         $this->data['permission'] = $this->session->userdata('permission');
         $this->data['user_name'] = $this->session->userdata('user_name');
         $this->data['user_id'] = $this->session->userdata('user_id');
@@ -696,6 +698,154 @@ class Wage extends Admin_Controller{
         }
     }
 
+    public function excel_cd(){
+        $this->data['chosen_month']=$_POST['chosen_month'];
+        $chosen_month=substr($_POST['chosen_month'],0,4).substr($_POST['chosen_month'],5,6).'01';
+        $month=date('Ym',strtotime('-1 month',strtotime($chosen_month)));
+       
+        $this->load->library('PHPExcel');
+        $this->load->library('PHPExcel/IOFactory');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $id=null;
+        $attr=array();
+        $data=array();
+        $active_counter=0;
+        //获取个人信息
+        $id=$this->data['user_id'];
+        $name=$this->data['user_name'];
+        $attr_data=$this->model_wage_zq_attr->getByDate($month,'cd');
+        $user_data=$this->model_wage_zq->getByDateAndName($month,$name,'cd');
+        
+        //获取线条信息
+        //
+        foreach($attr_data as $k =>$v){
+            $objPHPExcel->setActiveSheetIndex($active_counter);
+            $objPHPExcel->getActiveSheet($active_counter)->setTitle($v["sheet_tag"]);
+            $col = 0;
+            $fields=array();
+            $result=array();
+            $fields=$v;
+            foreach ($fields as $a => $b){
+                if($a!="sheet_tag" and $a!='date_tag' and $a!='workbook_tag'){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $b);
+                    $col++;
+                }
+            }
+            $row = 2;
+            $result=$user_data;
+            foreach($result as $a => $b){
+                if($b['sheet_tag']==$v['sheet_tag']){
+                    $col = 0;
+                    foreach ($b as $c => $d){
+                        if($c!="sheet_tag" and $c!='username' and $c!='date_tag' and $c!='workbook_tag'){
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d.' ');
+                            $col++;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            unset($fields);
+            unset($result);
+            $active_counter++;
+            $objPHPExcel->createSheet();
+        }
+        
+        #echo $month;
+		$filename = $this->data['user_name'].$month.'.xlsx';
+        ob_end_clean();
+        #header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename);
+        header('Cache-Control: max-age=0');
+
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+    }
+    public function zq_cd(){
+        $this->data['wage_data']="";
+        $this->data['attr_data']="";
+        $this->data['chosen_month']="";
+        $this->render_template('wage/wage_cd',$this->data);
+    }
+
+    
+    public function excel_team(){
+        $this->data['chosen_month']=$_POST['chosen_month'];
+        $chosen_month=substr($_POST['chosen_month'],0,4).substr($_POST['chosen_month'],5,6).'01';
+        $month=date('Ym',strtotime('-1 month',strtotime($chosen_month)));
+       
+        $this->load->library('PHPExcel');
+        $this->load->library('PHPExcel/IOFactory');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $id=null;
+        $attr=array();
+        $data=array();
+        $active_counter=0;
+        //获取个人信息
+        $id=$this->data['user_id'];
+        $name=$this->data['user_name'];
+        $attr_data=$this->model_wage_zq_attr->getByDate($month,'team');
+        $user_data=$this->model_wage_zq->getByDateAndName($month,$name,'team');
+        //获取线条信息
+        //
+        foreach($attr_data as $k =>$v){
+            $objPHPExcel->setActiveSheetIndex($active_counter);
+            $objPHPExcel->getActiveSheet($active_counter)->setTitle($v["sheet_tag"]);
+            $col = 0;
+            $fields=array();
+            $result=array();
+            $fields=$v;
+            foreach ($fields as $a => $b){
+                if($a!="sheet_tag" and $a!='date_tag' and $a!='workbook_tag'){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $b);
+                    $col++;
+                }
+            }
+            $row = 2;
+            $result=$user_data;
+            foreach($result as $a => $b){
+                if($b['sheet_tag']==$v['sheet_tag']){
+                    $col = 0;
+                    foreach ($b as $c => $d){
+                        if($c!="sheet_tag" and $c!='username' and $c!='date_tag' and $c!='workbook_tag'){
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d.' ');
+                            $col++;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            unset($fields);
+            unset($result);
+            $active_counter++;
+            $objPHPExcel->createSheet();
+        }
+        
+        #echo $month;
+		$filename = $this->data['user_name'].$month.'.xlsx';
+        ob_end_clean();
+        #header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename);
+        header('Cache-Control: max-age=0');
+
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+    }
+    public function zq_team(){
+        $this->data['wage_data']="";
+        $this->data['attr_data']="";
+        $this->data['chosen_month']="";
+        $this->render_template('wage/wage_team',$this->data);
+    }
+
     public function search_mydept_excel($doc_name){
         $this->load->library("phpexcel");//ci框架中引入excel类
         $this->load->library('PHPExcel/IOFactory');
@@ -898,7 +1048,7 @@ class Wage extends Admin_Controller{
         }
         
         #echo $month;
-		$filename = $user_data['PERSON_NAME'].$month.'.xlsx';
+		$filename = $this->data['user_name'].$month.'.xlsx';
         ob_end_clean();
         #header('Content-Type: application/vnd.ms-excel');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

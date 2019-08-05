@@ -19,7 +19,7 @@
         <li id="uploadHolidayNav"><a href="<?php echo base_url('super_holiday/holiday_import') ?>"><i class="fa fa-cloud-upload"></i> 上传年假信息</a></li>
         <!--<li id="downloadHolidayNav"><a href="<?php echo base_url('super_holiday/download_page') ?>"><i class="fa fa-cloud-download"></i> 下载年假计划汇总表</a></li>-->
         <li id="progressHolidayNav"><a href="<?php echo base_url('super_holiday/progress') ?>"><i class="fa fa-list"></i> 进度</a></li>
-        
+
         <li class="treeview" id="uploadHolidayDoc">
           <a href="#">
             <i class="fa fa-cloud"></i>
@@ -140,7 +140,6 @@
             <i class="fa fa-cloud-download"></i><span>工资明细导出</span>
           </a>
         </li>
-
         
         <li class="treeview" id="wageUserNav">
           <a href="#">
@@ -293,6 +292,19 @@
           <a href="<?php echo base_url('super_hr/hr_proof') ?>">
             <i class="fa fa-money"></i>
             <span> 开具证明</span>
+          </a>
+        </li>
+        <?php elseif($permission=='政企'):?>
+        <li id="zqcdMainMenu">
+          <a href="<?php echo base_url('super_wage/search_cd') ?>">
+            <i class="fa fa-tasks"></i>
+            <span> C、D岗提成明细</span>
+          </a>
+        </li>
+        <li id="zqteamMainMenu">
+          <a href="<?php echo base_url('super_wage/search_team') ?>">
+            <i class="fa fa-tasks"></i>
+            <span> 团队经理提成明细</span>
           </a>
         </li>
         <?php endif; ?>

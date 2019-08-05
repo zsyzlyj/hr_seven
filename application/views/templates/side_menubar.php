@@ -50,12 +50,36 @@
           <li id="applyWageProof"><a href="<?php echo base_url('wage/apply_wage_proof') ?>"><i class="fa fa-list"></i><span> 收入证明申请</span></a></li><!---->
           <?php endif;?>
           <!---->
-          <li id="chargeMainMenu">
-            <a href="<?php echo base_url('wage/charge') ?>">
-              <i class="fa fa-file-archive-o"></i>
-              <span>本月提成明细</span>
+          <li class="treeview" id="zqMainMenu">
+            <a href="#">
+              <i class="fa fa-building"></i>
+              <span>政企线提成明细</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
             </a>
+            <ul class="treeview-menu">
+              <li id="chargeMainMenu">
+                <a href="<?php echo base_url('wage/charge') ?>">
+                  <i class="fa fa-file-archive-o"></i>
+                  <span>客户经理提成明细</span>
+                </a>
+              </li>
+              <li id="cdMainMenu">
+                <a href="<?php echo base_url('wage/zq_cd') ?>">
+                  <i class="fa fa-file-archive-o"></i>
+                  <span>C、D岗提成</span>
+                </a>
+              </li>
+              <li id="teamMainMenu">
+                <a href="<?php echo base_url('wage/zq_team') ?>">
+                  <i class="fa fa-file-archive-o"></i>
+                  <span>团队经理提成</span>
+                </a>
+              </li>
+            </ul>
           </li>
+          
           <!--
           <li id="gwchargeMainMenu">
             <a href="<?php echo base_url('wage/gw_charge') ?>">
