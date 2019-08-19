@@ -45,7 +45,7 @@
                         <div class="modal-content-apply">
                           <div class="modal-header">
                           <div style="text-align:right">
-                          <form action="<?php echo base_url('super_wage/wage_proof');?>" style="margin:0px;display:inline;" method="post">
+                          <form action="<?php echo base_url('super_wage/wage_proof_audit');?>" style="margin:0px;display:inline;" method="post">
                             <input name="id" type="hidden" value="<?php echo $v['id'];?>" />
                             <input name="user_id" type="hidden" value="<?php echo $v['user_id'];?>" />
                             <input name="type" type="hidden" value="<?php echo $v['type'];?>" />

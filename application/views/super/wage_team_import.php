@@ -5,7 +5,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      团队经理提成明细导入
+      团队经理提成导入
     </h1>
   </section>
 

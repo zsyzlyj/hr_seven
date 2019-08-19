@@ -298,13 +298,19 @@
         <li id="zqcdMainMenu">
           <a href="<?php echo base_url('super_wage/search_cd') ?>">
             <i class="fa fa-tasks"></i>
-            <span> C、D岗提成明细</span>
+            <span> C、D岗提成明细上传</span>
           </a>
         </li>
         <li id="zqteamMainMenu">
           <a href="<?php echo base_url('super_wage/search_team') ?>">
             <i class="fa fa-tasks"></i>
-            <span> 团队经理提成明细</span>
+            <span> 团队经理提成上传</span>
+          </a>
+        </li>
+        <li id="zqsaleMainMenu">
+          <a href="<?php echo base_url('super_wage/search_sale') ?>">
+            <i class="fa fa-tasks"></i>
+            <span> 客户经理提成上传</span>
           </a>
         </li>
         <?php endif; ?>

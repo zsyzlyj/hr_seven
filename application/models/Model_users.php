@@ -18,7 +18,7 @@ class Model_users extends CI_Model{
 			return $query->row_array();
 		}
 	}
-	public function getNameById($userId = null){
+	public function getById($userId = null){
 		if($userId){
 			$sql = "SELECT * FROM users WHERE user_id = ?";	
 			$query = $this->db->query($sql, array($userId));
@@ -26,7 +26,7 @@ class Model_users extends CI_Model{
 			return $query->row_array();
 		}
 	}
-	public function getIdByName($name){
+	public function getByName($name){
 		$sql = 'SELECT user_id,username FROM users WHERE username = ?';
 		$query = $this->db->query($sql, array($name));
 		return $query->row_array();

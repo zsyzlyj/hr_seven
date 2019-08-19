@@ -71,10 +71,18 @@
                   <span>C、D岗提成</span>
                 </a>
               </li>
+              <!--
               <li id="teamMainMenu">
                 <a href="<?php echo base_url('wage/zq_team') ?>">
                   <i class="fa fa-file-archive-o"></i>
-                  <span>团队经理提成</span>
+                  <span>团队经理提成汇总</span>
+                </a>
+              </li>
+              -->
+              <li id="saleMainMenu">
+                <a href="<?php echo base_url('wage/zq_sale') ?>">
+                  <i class="fa fa-file-archive-o"></i>
+                  <span>客户经理提成汇总</span>
                 </a>
               </li>
             </ul>

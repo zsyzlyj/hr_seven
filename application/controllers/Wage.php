@@ -193,7 +193,7 @@ class Wage extends Admin_Controller{
     **/
     private function num_to_rmb($num){
         $c1 = "零壹贰叁肆伍陆柒捌玖";
-        $c2 = "分角圓拾佰仟萬拾佰仟億";
+        $c2 = "分角元拾佰仟万拾佰仟億";
         //精确到分后面就不要了，所以只留两个小数位
         #$num = round($num, 2);
         $num = round($num, 0);
@@ -215,7 +215,7 @@ class Wage extends Admin_Controller{
             //每次将最后一位数字转化为中文
             $p1 = substr($c1, 3 * $n, 3);
             $p2 = substr($c2, 3 * $i, 3);
-            if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '萬' || $p2 == '圓'))) {
+            if ($n != '0' || ($n == '0' && ($p2 == '亿' || $p2 == '万' || $p2 == '元'))) {
                 $c = $p1 . $p2 . $c;
             } else {
                 $c = $p1 . $c;
@@ -235,7 +235,7 @@ class Wage extends Admin_Controller{
             //utf8一个汉字相当3个字符
             $m = substr($c, $j, 6);
             //处理数字中很多0的情况,每次循环去掉一个汉字“零”
-            if ($m == '零圓' || $m == '零萬' || $m == '零亿' || $m == '零零') {
+            if ($m == '零元' || $m == '零万' || $m == '零亿' || $m == '零零') {
                 $left = substr($c, 0, $j);
                 $right = substr($c, $j + 3);
                 $c = $left . $right;
@@ -250,7 +250,7 @@ class Wage extends Admin_Controller{
         }
         //将处理的汉字加上“整”
         if (empty($c)) {
-            return "零圓整";
+            return "零元整";
         }else{
             return $c . "整";
         }
@@ -845,7 +845,78 @@ class Wage extends Admin_Controller{
         $this->data['chosen_month']="";
         $this->render_template('wage/wage_team',$this->data);
     }
+    public function excel_sale(){
+        $this->data['chosen_month']=$_POST['chosen_month'];
+        $chosen_month=substr($_POST['chosen_month'],0,4).substr($_POST['chosen_month'],5,6).'01';
+        $month=date('Ym',strtotime('-1 month',strtotime($chosen_month)));
+       
+        $this->load->library('PHPExcel');
+        $this->load->library('PHPExcel/IOFactory');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setTitle("export")->setDescription("none");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $id=null;
+        $attr=array();
+        $data=array();
+        $active_counter=0;
+        //获取个人信息
+        $id=$this->data['user_id'];
+        $name=$this->data['user_name'];
+        $attr_data=$this->model_wage_zq_attr->getByDate($month,'sale');
+        $user_data=$this->model_wage_zq->getByDateAndName($month,$name,'sale');
+        //获取线条信息
+        //
+        foreach($attr_data as $k =>$v){
+            $objPHPExcel->setActiveSheetIndex($active_counter);
+            $objPHPExcel->getActiveSheet($active_counter)->setTitle($v["sheet_tag"]);
+            $col = 0;
+            $fields=array();
+            $result=array();
+            $fields=$v;
+            foreach ($fields as $a => $b){
+                if($a!="sheet_tag" and $a!='date_tag' and $a!='workbook_tag'){
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $b);
+                    $col++;
+                }
+            }
+            $row = 2;
+            $result=$user_data;
+            foreach($result as $a => $b){
+                if($b['sheet_tag']==$v['sheet_tag']){
+                    $col = 0;
+                    foreach ($b as $c => $d){
+                        if($c!="sheet_tag" and $c!='username' and $c!='date_tag' and $c!='workbook_tag'){
+                            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $d.' ');
+                            $col++;
+                        }
+                    }
+                    break;
+                }
+            }
+            
+            unset($fields);
+            unset($result);
+            $active_counter++;
+            $objPHPExcel->createSheet();
+        }
+        
+        #echo $month;
+		$filename = $this->data['user_name'].$month.'.xlsx';
+        ob_end_clean();
+        #header('Content-Type: application/vnd.ms-excel');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename);
+        header('Cache-Control: max-age=0');
 
+        $objWriter = IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
+    }
+    public function zq_sale(){
+        $this->data['wage_data']="";
+        $this->data['attr_data']="";
+        $this->data['chosen_month']="";
+        $this->render_template('wage/wage_sale',$this->data);
+    }
     public function search_mydept_excel($doc_name){
         $this->load->library("phpexcel");//ci框架中引入excel类
         $this->load->library('PHPExcel/IOFactory');
