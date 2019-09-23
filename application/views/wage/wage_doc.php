@@ -39,11 +39,11 @@
                     <?php if($b['doc_type']==$v['doc_type']):?>
                       <td style="text-align: center;"><?php echo ++$counter;?></td>
                       <!--<td><a id="load_pdf" href="javascript:void(0);" onclick="get_pdf('<?php echo $v['doc_path'];?>')" value="<?php echo $v['doc_path'];?>"><p id="doc_path<?php echo $counter;?>"><?php echo $v['doc_name']?></p></a></td>-->
-                      <form id="form<?php echo $counter;?>" action="<?php echo base_url('wage/watermark');?>" method="POST" target="_blank">
+                      <form id="form<?php echo $v['doc_name'];?>" action="<?php echo base_url('wage/watermark');?>" method="POST" target="_blank">
                       <input name="doc_path" type="hidden" value="<?php echo $v['doc_path'];?>">
                       <!--<td><a href="javascript:void(0);" onclick="document.getElementById('form<?php echo $counter;?>').submit();"><p id="doc_path<?php echo $counter;?>"><?php echo $v['doc_name']?></p></a></td>
                       -->
-                      <td><a href="javascript:void(0);" onclick="document.getElementById('form<?php echo $counter;?>').submit()"><p id="doc_path<?php echo $counter;?>"><?php echo $v['doc_name']?></p></a></td>
+                      <td><a href="javascript:void(0);" onclick="document.getElementById('form<?php echo $v['doc_name'];?>').submit()"><p id="doc_path<?php echo $counter;?>"><?php echo $v['doc_name']?></p></a></td>
                       
                       </form>
                     <?php endif;?>
